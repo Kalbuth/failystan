@@ -63,6 +63,7 @@ failystan.faily.sets.SAMGroup = SET_GROUP:New():FilterPrefixes( { "SAM Faily" } 
 
 failystan.faily.sets.AAGroup = SET_GROUP:New():FilterPrefixes( { "=F= M2000" , "=F= Mig21" } ):FilterStart()
 
+[[--
 -- EWR definition
 failystan.faily.ewrDetection = DETECTION_BASE:New( failystan.faily.sets.SAMGroup, 115000 )
 failystan.faily.ewrMission = FAILY_MISSION:New( failystan.faily.mainHQ, 'Airspace Security', 'Primary', 'Keep Failystan airspace secure!', "Failystan" )
@@ -84,4 +85,7 @@ randChoice = mist.random(5)
 transportTargetZone = failystan.transportLocs[randChoice]
 
 -- local TaskTransport = TASK_BASE:New(transportMission, 
+--]]
+
+
 
