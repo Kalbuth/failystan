@@ -134,8 +134,8 @@ do
 		local coal = self.CommandCenter:GetCoalition()
 		if not self.MenuGCI then
 			self.MenuGCI = MENU_COALITION:New( coal, "GCI" )
-			self.MenuCmdPicture = MENU_COALITION_COMMAND:New( coal, "Request Picture", self.MenuGCI, self:GetPicture() )
 		end
+		self.MenuCmdPicture = MENU_COALITION_COMMAND:New( coal, "Request Picture", self.MenuGCI, self:GetPicture() )
 	end
 	
 	function DETECTION_GCI:GetPicture()
