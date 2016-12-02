@@ -17,41 +17,7 @@ function SET_UNIT:HasAirUnits()
   return AirUnitCount
 end
 
-
-
--- Faily_CC : prise en charge des missions
-
-FAILY_COMMANDCENTER = {
-	ClassName = "FAILY_COMMANDCENTER",
-}
-
-function FAILY_COMMANDCENTER:New( HQ, HQName )
-	
-	local self = BASE:Inherit( self, COMMANDCENTER:New( HQ, HQName ) )
-	
-	self:F()
-	
-	self:EventOnBirth(
-    --- @param Core.Event#EVENTDATA EventData
-    function( HQ, EventData )
-      self:E( { EventData } )
-      local EventGroup = GROUP:Find( EventData.IniDCSGroup )
-			self:E( { "Group Spawned, CC checking...",  EventGroup } )
-      if EventGroup and HQ:HasGroup( EventGroup ) then
-				self:E( { "Group has missions here!", EventGroup } )
-        local MenuHQ = MENU_GROUP:New( EventGroup, "HQ" )
-        local MenuReporting = MENU_GROUP:New( EventGroup, "Reporting", MenuHQ )
-        local MenuMissions = MENU_GROUP_COMMAND:New( EventGroup, "Missions", MenuReporting, HQ.ReportMissions, HQ, EventGroup )
-      end
-    end
-  )
-	
-	return self
-	
-end
-	
-failystan = {}
-
+[[ -- Kept for reference
 FAILY_MISSION = {
 	ClassName = "FAILY_MISSION",
 }
@@ -78,7 +44,7 @@ function failystan.MISSION_TRANSPORT:New( HQ, MissionName, MissionPriority, Miss
 	self.TransportDest = TransportDest
 	return self
 end
-
+-- ]]
 
 do
 	DETECTION_GCI = {
@@ -93,7 +59,7 @@ do
 		self.Mission = Mission
 		self.CommandCenter = CommandCenter
 		self.Frequency = Frequency
-		
+		self.DetectedSets = {}
 		self:SetFrequency( Frequency )
 		self:SetCallsign( 101 )
 		self:_InitRadio()
@@ -145,22 +111,28 @@ do
 		-- cf Detection.lua l. 796 & 905
 		
 		
+		
+	end
+	
+	function DETECTION_GCI:CreateDetectionSets()
+		self:F2()
+		self.DetectedSets = nil
+		self.DetectedSets = {}
+		local TmpSet = SET_UNIT:New()
+		for DetectedUnitName, DetectedObjectData in pairs( self.DetectedObjects ) do
+			local DetectedObject = self:GetDetectedObject( DetectedUnitName )
+			if DetectedObject then
+				local DetectedUnit = UNIT:FindByName( DetectedUnitName )
+				if DetectedUnit and DetectedUnit:IsAir() then
+					TmpSet:AddUnit( DetectedUnit )
+				end
+			end
+		end
+		self.DetectedSets[0] = TmpSet
+		
 	end
 	
 	
-	FAILY_DETECTION_DISPATCHER = {
-		 ClassName = "FAILY_DETECTION_DISPATCHER",
-		 Mission = nil,
-		 CommandCenter = nil,
-		 Detection = nil,
-	}
-  function FAILY_DETECTION_DISPATCHER:New( Mission, CommandCenter, SetGroup, Detection )
-  
-    -- Inherits from DETECTION_DISPATCHER
-    local self = BASE:Inherit( self, DETECTION_DISPATCHER:New( Mission, CommandCenter, SetGroup, Detection ) ) -- #DETECTION_DISPATCHER
-    
-    return self
-  end
 
 
 end
