@@ -81,7 +81,7 @@ do
 		-- to be continued
 		-- DETECION_GCI:CreateDetectionSets() a faire
 		-- cf Detection.lua l. 796 & 905
-		for UnitID, UnitData in pairs( self.DetectedSets[0]:GetSet() ) do
+		for UnitID, UnitData in pairs( self.DetectedSets:GetSet() ) do
 			local DetectedUnit = UnitData
 			
 		end
@@ -103,7 +103,7 @@ do
 				end
 			end
 		end
-		self.DetectedSets[0] = TmpSet
+		self.DetectedSets = TmpSet
 		
 	end
 	
