@@ -6,7 +6,7 @@ dofile(FailyLfs.writedir()..'/Scripts/Failystan/Moose_Failystan.lua')
 
 
 
-
+failystan = {}
 
 
 CivFailyIncList = { "Template Civ Faily Inc 1", "Template Civ Faily Inc 2" }
@@ -63,29 +63,8 @@ failystan.faily.sets.SAMGroup = SET_GROUP:New():FilterPrefixes( { "SAM Faily" } 
 
 failystan.faily.sets.AAGroup = SET_GROUP:New():FilterPrefixes( { "=F= M2000" , "=F= Mig21" } ):FilterStart()
 
-[[--
--- EWR definition
-failystan.faily.ewrDetection = DETECTION_BASE:New( failystan.faily.sets.SAMGroup, 115000 )
-failystan.faily.ewrMission = FAILY_MISSION:New( failystan.faily.mainHQ, 'Airspace Security', 'Primary', 'Keep Failystan airspace secure!', "Failystan" )
-failystan.faily.ewrDispatcher = DETECTION_DISPATCHER:New( failystan.faily.ewrMission, failystan.faily.mainHQ, failystan.faily.sets.AAGroup , failystan.faily.ewrDetection )
-
-
-failystan.transportLocs = { 'LOC_1', 'LOC_2', 'LOC_3', 'LOC_4', 'LOC_5' }
-local transportMission = MISSION:New( failystan.faily.mainHQ, 'Transport troops', "Primary", "Transport our troops to their new home", "Failystan" )
-local randChoice = mist.random(5)
-transportTargetGroup = ctld.spawnGroupAtTrigger("blue", 10, failystan.transportLocs[randChoice], 100)
-
-local transportTask = TASK_BASE:New( transportMission, failystan.faily.sets.TranspHeliGroup, "Mission de Transport", "Troupes", "Transport" )
-
-transportMission:AddTask( transportTask )
-
-local tmpLocs = failystan.transportLocs 
--- tmpLocs[randChoice] = nil
-randChoice = mist.random(5)
-transportTargetZone = failystan.transportLocs[randChoice]
-
--- local TaskTransport = TASK_BASE:New(transportMission, 
---]]
-
-
+failystan.faily.NoGoZone = ZONE_BASE:New( 'FAILY_NO-GO' )
+failystan.faily.Ewr = GROUP:FindByName( 'SAM Faily EWR 1' )
+failystan.faily.EwrMission = MISSION:New( failystan.faily.mainHQ, 'Airspace Security', 'Primary', 'Keep Failystan airspace secure!', "Failystan" )
+failystan.faily.EwrDetection = DETECTION_GCI:New( failystan.faily.sets.SAMGroup, 115000, failystan.faily.NoGoZone, failystan.faily.EwrMission, failystan.faily.Ewr, 140000000 )
 

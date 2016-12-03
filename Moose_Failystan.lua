@@ -17,34 +17,6 @@ function SET_UNIT:HasAirUnits()
   return AirUnitCount
 end
 
-[[ -- Kept for reference
-FAILY_MISSION = {
-	ClassName = "FAILY_MISSION",
-}
-
-function FAILY_MISSION:New(HQ, MissionName, MissionPriority, MissionBriefing, MissionCoalition )
-
-	local self = BASE:Inherit( self, MISSION:New(HQ, MissionName, MissionPriority, MissionBriefing, MissionCoalition ))
-	
-	self:E({ HQ, MissionName, MissionPriority, MissionBriefing, MissionCoalition })
-
-	return self
-
-end
-	
-failystan.MISSION_TRANSPORT = {
-	ClassName = "MISSION_TRANSPORT",
-}
-
-function failystan.MISSION_TRANSPORT:New( HQ, MissionName, MissionPriority, MissionBriefing, MissionCoalition, TransportGroup, TransportDest )
-	local self = BASE:Inherit( self, MISSION:New( HQ, MissionName, MissionPriority, MissionBriefing, MissionCoalition ) )
-	self:F()
-	
-	self.TransportGroup = TransportGroup
-	self.TransportDest = TransportDest
-	return self
-end
--- ]]
 
 do
 	DETECTION_GCI = {
@@ -83,7 +55,7 @@ do
 	end
 
 	function DETECTION_GCI:SetCallsign( Callsign )
-		-- sets the emitter frequency for GCI Command Center
+		-- sets the emitter callsign for GCI Command Center
 		self:F2( Callsign )
 		local SetCallsign = {
 			['id'] = 'SetCallsign',
@@ -109,7 +81,10 @@ do
 		-- to be continued
 		-- DETECION_GCI:CreateDetectionSets() a faire
 		-- cf Detection.lua l. 796 & 905
-		
+		for UnitID, UnitData in pairs( self.DetectedSets[0]:GetSet() ) do
+			local DetectedUnit = UnitData
+			
+		end
 		
 		
 	end
