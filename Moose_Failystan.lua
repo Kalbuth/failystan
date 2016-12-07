@@ -20,7 +20,7 @@ end
 
 do
 	DETECTION_GCI = {
-		ClassName = DETECTION_ZONE,
+		ClassName = DETECTION_GCI,
 		DetectionZone = {},
 	}
 	function DETECTION_GCI:New(DetectionSetGroup, DetectionRange, DetectionZone, Mission, CommandCenter, Frequency)
@@ -31,12 +31,12 @@ do
 		self.Mission = Mission
 		self.CommandCenter = CommandCenter
 		self.Frequency = Frequency
-		self.DetectedSets = {}
+		self.DetectedSets = SET_UNIT:New()
 		self:SetFrequency( Frequency )
-		self:SetCallsign( 101 )
+		self:SetCallsign( 1 )
 		self:_InitRadio()
 		
-		self.Schedule(0, 30)
+		self:Schedule(0, 30)
 		
 		return self
 	end
@@ -69,41 +69,49 @@ do
 	
 	function DETECTION_GCI:_InitRadio()
 		self:F2()
+		self:E('adding GCI menu')
 		local coal = self.CommandCenter:GetCoalition()
 		if not self.MenuGCI then
 			self.MenuGCI = MENU_COALITION:New( coal, "GCI" )
 		end
-		self.MenuCmdPicture = MENU_COALITION_COMMAND:New( coal, "Request Picture", self.MenuGCI, self:GetPicture() )
+		self:E('adding Picture entry')
+		self.MenuCmdPicture = MENU_COALITION_COMMAND:New( coal, "Request Picture", self.MenuGCI, self.GetPicture, { self = self } )
 	end
 	
-	function DETECTION_GCI:GetPicture()
-		self:F2()
+	function DETECTION_GCI.GetPicture( PictureParams )
+		local self = PictureParams.self
+		-- self:F2()
+		local TransmitMessage = { 
+			['id'] = 'transmitMessage', 
+			['params'] = {
+				['duration'] = 15,
+				['subtitle'] = "This is a EWR test message",
+				['loop'] = false,
+				['file'] = "beacon.ogg",
+			},
+		}
+		self.CommandCenter:SetCommand( TransmitMessage )
 		-- to be continued
 		-- DETECION_GCI:CreateDetectionSets() a faire
 		-- cf Detection.lua l. 796 & 905
-		for UnitID, UnitData in pairs( self.DetectedSets:GetSet() ) do
-			local DetectedUnit = UnitData
-			
-		end
-		
-		
+		-- for UnitID, UnitData in pairs( self.DetectedSets:GetSet() ) do
+		-- 	local DetectedUnit = UnitData
+		--end
 	end
 	
 	function DETECTION_GCI:CreateDetectionSets()
 		self:F2()
 		self.DetectedSets = nil
-		self.DetectedSets = {}
-		local TmpSet = SET_UNIT:New()
+		self.DetectedSets = SET_UNIT:New()
 		for DetectedUnitName, DetectedObjectData in pairs( self.DetectedObjects ) do
 			local DetectedObject = self:GetDetectedObject( DetectedUnitName )
 			if DetectedObject then
 				local DetectedUnit = UNIT:FindByName( DetectedUnitName )
 				if DetectedUnit and DetectedUnit:IsAir() then
-					TmpSet:AddUnit( DetectedUnit )
+					self.DetectedSets:AddUnit( DetectedUnit )
 				end
 			end
 		end
-		self.DetectedSets = TmpSet
 		
 	end
 	
