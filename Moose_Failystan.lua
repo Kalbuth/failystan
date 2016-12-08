@@ -82,15 +82,17 @@ do
 		local self = PictureParams.self
 		-- self:F2()
 		local TransmitMessage = { 
-			['id'] = 'transmitMessage', 
+			['id'] = 'TransmitMessage', 
 			['params'] = {
 				['duration'] = 15,
 				['subtitle'] = "This is a EWR test message",
 				['loop'] = false,
-				['file'] = "beacon.ogg",
+				['file'] = "l10n/DEFAULT/beaconsilent.ogg",
 			},
 		}
-		self.CommandCenter:SetCommand( TransmitMessage )
+		if self.CommandCenter then
+			self.CommandCenter:SetCommand( TransmitMessage )
+		end
 		-- to be continued
 		-- DETECION_GCI:CreateDetectionSets() a faire
 		-- cf Detection.lua l. 796 & 905
